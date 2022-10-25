@@ -9,6 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@ant-design/icons": "^4.7.0",
     "@unocss/reset": "^0.45.30",
     "preact": "^10.10.6"
   },
