@@ -1,6 +1,6 @@
 import { h } from "preact";
 import { ClearOutlined, CloseOutlined } from "@ant-design/icons";
-import { useEffect } from "preact/compat";
+import { useEffect, useRef } from "preact/compat";
 import { numberColors } from "../var/Color";
 
 const numbers = Array.from({ length: 9 }).map((_, idx) => idx + 1);
@@ -11,9 +11,13 @@ interface Props {
   resetActive: () => void;
 }
 
-const Toolbar = ({ onClick, onClear, resetActive }: Props) => {
+const Toolbar = (props: Props) => {
+  const propRef = useRef(props);
+  propRef.current = props;
+
   useEffect(() => {
     const listener = (e: KeyboardEvent) => {
+      const { onClick, onClear, resetActive } = propRef.current;
       switch (e.key) {
         case "Escape":
           return resetActive?.();
@@ -27,7 +31,8 @@ const Toolbar = ({ onClick, onClear, resetActive }: Props) => {
 
     document.addEventListener("keydown", listener);
     return () => document.removeEventListener("keydown", listener);
-  }, [onClick, onClear]);
+  }, []);
+
   return (
     <div select-none>
       <div flex="~" items-center justify-center mb-2>
@@ -43,7 +48,7 @@ const Toolbar = ({ onClick, onClear, resetActive }: Props) => {
               mr-1
               cursor="pointer"
               bg-slate-600
-              onClick={() => onClick(String(it))}
+              onClick={() => props.onClick(String(it))}
             >
               <div text-xl font-500>
                 {it}
@@ -62,7 +67,7 @@ const Toolbar = ({ onClick, onClear, resetActive }: Props) => {
           mr-1
           cursor="pointer"
           bg-slate-600
-          onClick={onClear}
+          onClick={props.onClear}
         >
           <ClearOutlined />
         </div>
@@ -75,7 +80,7 @@ const Toolbar = ({ onClick, onClear, resetActive }: Props) => {
           mr-1
           cursor="pointer"
           bg-slate-600
-          onClick={resetActive}
+          onClick={props.resetActive}
         >
           <CloseOutlined />
         </div>
