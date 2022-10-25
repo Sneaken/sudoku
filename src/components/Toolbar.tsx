@@ -29,11 +29,11 @@ const Toolbar = ({ onClick, onClear, resetActive }: Props) => {
     return () => document.removeEventListener("keydown", listener);
   }, [onClick, onClear]);
   return (
-    <div>
+    <div select-none>
       <div flex="~" items-center justify-center mb-2>
         {numbers.map((it) => {
           return (
-            <button
+            <div
               className={numberColors[it]}
               flex="~"
               items-center
@@ -42,17 +42,18 @@ const Toolbar = ({ onClick, onClear, resetActive }: Props) => {
               min-h-8
               mr-1
               cursor="pointer"
+              bg-gray
               onClick={() => onClick(String(it))}
             >
               <div text-xl font-500>
                 {it}
               </div>
-            </button>
+            </div>
           );
         })}
       </div>
       <div flex="~" items-center justify-center>
-        <button
+        <div
           flex="~"
           items-center
           justify-center
@@ -60,11 +61,12 @@ const Toolbar = ({ onClick, onClear, resetActive }: Props) => {
           min-h-8
           mr-1
           cursor="pointer"
+          bg-gray-400
           onClick={onClear}
         >
           <ClearOutlined />
-        </button>
-        <button
+        </div>
+        <div
           flex="~"
           items-center
           justify-center
@@ -72,10 +74,11 @@ const Toolbar = ({ onClick, onClear, resetActive }: Props) => {
           min-h-8
           mr-1
           cursor="pointer"
+          bg-gray-400
           onClick={resetActive}
         >
           <CloseOutlined />
-        </button>
+        </div>
       </div>
     </div>
   );

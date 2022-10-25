@@ -32,7 +32,7 @@ const Board = () => {
           New Game
         </button>
       </div>
-      <div p5>
+      <div p5 select-none>
         {board.map((row, idx) => {
           return (
             <div
@@ -46,12 +46,13 @@ const Board = () => {
               {row.map((col, idy) => {
                 const disabled = isDisabled([idx, idy]);
                 return (
-                  <button
+                  <div
                     className={[
                       numberColors[Number(col)],
                       idy % 3 === 2 ? "mr-1" : "mr-0.5",
                       active[0] === idx && active[1] === idy && "animate-pulse",
-                      disabled && "cursor-pointer",
+                      !disabled && "cursor-pointer",
+                      disabled ? "bg-gray-400" : "bg-gray-200",
                     ]
                       .filter(Boolean)
                       .join(" ")}
@@ -61,12 +62,12 @@ const Board = () => {
                     min-w-8
                     min-h-8
                     border="0.5 gray-400/10"
-                    onClick={() => disabled && onActiveChange([idx, idy])}
+                    onClick={() => !disabled && onActiveChange([idx, idy])}
                   >
                     <div text-xl font-600>
                       {col}
                     </div>
-                  </button>
+                  </div>
                 );
               })}
             </div>
