@@ -1,46 +1,37 @@
 import { h } from "preact";
 import { numberColors } from "../var/Color";
-import { useCallback, useState } from "preact/hooks";
+import { useCallback } from "preact/hooks";
 import Toolbar from "../components/Toolbar";
+import useGame from "../hooks/useGame";
 
 const Board = () => {
-  const [board, setBoard] = useState([
-    ["5", "3", "", "", "7", "", "", "", ""],
-    ["6", "", "", "1", "9", "5", "", "", ""],
-    ["", "9", "8", "", "", "", "", "6", ""],
-    ["8", "", "", "", "6", "", "", "", "3"],
-    ["4", "", "", "8", "", "3", "", "", "1"],
-    ["7", "", "", "", "2", "", "", "", "6"],
-    ["", "6", "", "", "", "", "2", "8", ""],
-    ["", "", "", "4", "1", "9", "", "", "5"],
-    ["", "", "", "", "8", "", "", "7", "9"],
-  ]);
-
-  const [active, setActive] = useState<[number, number]>([-1, -1]);
+  const { board, active, isDisabled, onBoardChange, onActiveChange, newGame } =
+    useGame();
 
   const handleClick = useCallback(
     (number: string) => {
-      setBoard((board) => {
-        const newBoard = JSON.parse(JSON.stringify(board));
-        newBoard[active[0]][active[1]] = number;
-        return newBoard;
-      });
+      onBoardChange(number);
     },
-    [active]
+    [onBoardChange]
   );
   const handleClear = useCallback(() => {
-    setBoard((board) => {
-      const newBoard = JSON.parse(JSON.stringify(board));
-      newBoard[active[0]][active[1]] = "";
-      return newBoard;
-    });
-  }, [active]);
+    onBoardChange("");
+  }, [onBoardChange]);
 
   const handleResetActive = useCallback(() => {
-    setActive([-1, -1]);
-  }, []);
+    onActiveChange([-1, -1]);
+  }, [onActiveChange]);
   return (
     <>
+      <div p="y-2">
+        <button
+          onClick={() => {
+            newGame();
+          }}
+        >
+          New Game
+        </button>
+      </div>
       <div p5>
         {board.map((row, idx) => {
           return (
@@ -68,7 +59,9 @@ const Board = () => {
                     min-h-8
                     border="0.5 gray-400/10"
                     mr={idy % 3 === 2 ? "1" : "0.5"}
-                    onClick={() => setActive([idx, idy])}
+                    onClick={() =>
+                      isDisabled([idx, idy]) && onActiveChange([idx, idy])
+                    }
                   >
                     <div text-xl font-600>
                       {col}
