@@ -36,18 +36,19 @@ const Board = () => {
         {board.map((row, idx) => {
           return (
             <div
+              className={idx % 3 === 2 ? "mb-1" : "mb-0.5"}
               flex="~"
               items-center
               justify-center
               w-max
               ma
-              mb={idx % 3 === 2 ? "1" : "0.5"}
             >
               {row.map((col, idy) => {
                 return (
                   <button
                     className={[
                       numberColors[Number(col)],
+                      idy % 3 === 2 ? "mr-1" : "mr-0.5",
                       active[0] === idx && active[1] === idy && "animate-pulse",
                     ]
                       .filter(Boolean)
@@ -58,7 +59,6 @@ const Board = () => {
                     min-w-8
                     min-h-8
                     border="0.5 gray-400/10"
-                    mr={idy % 3 === 2 ? "1" : "0.5"}
                     onClick={() =>
                       isDisabled([idx, idy]) && onActiveChange([idx, idy])
                     }
