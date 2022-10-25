@@ -44,12 +44,14 @@ const Board = () => {
               ma
             >
               {row.map((col, idy) => {
+                const disabled = isDisabled([idx, idy]);
                 return (
                   <button
                     className={[
                       numberColors[Number(col)],
                       idy % 3 === 2 ? "mr-1" : "mr-0.5",
                       active[0] === idx && active[1] === idy && "animate-pulse",
+                      disabled && "cursor-pointer",
                     ]
                       .filter(Boolean)
                       .join(" ")}
@@ -59,9 +61,7 @@ const Board = () => {
                     min-w-8
                     min-h-8
                     border="0.5 gray-400/10"
-                    onClick={() =>
-                      isDisabled([idx, idy]) && onActiveChange([idx, idy])
-                    }
+                    onClick={() => disabled && onActiveChange([idx, idy])}
                   >
                     <div text-xl font-600>
                       {col}
