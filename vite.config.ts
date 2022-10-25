@@ -11,6 +11,7 @@ import {
 export default defineConfig({
   plugins: [
     Unocss({
+      inspector: true,
       presets: [presetAttributify(), presetUno()],
       transformers: [
         transformerAttributifyJsx(), // <--
