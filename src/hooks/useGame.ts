@@ -90,7 +90,7 @@ const useGame = () => {
     [active]
   );
   const isDisabled = useCallback(
-    ([idx, idy]: [number, number]) => !!spacesMapping[`${idx},${idy}`],
+    ([idx, idy]: [number, number]) => !spacesMapping[`${idx},${idy}`],
     [spacesMapping]
   );
 
