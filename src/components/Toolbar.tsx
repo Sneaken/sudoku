@@ -42,7 +42,7 @@ const Toolbar = ({ onClick, onClear, resetActive }: Props) => {
               min-h-8
               mr-1
               cursor="pointer"
-              bg-gray
+              bg-slate-600
               onClick={() => onClick(String(it))}
             >
               <div text-xl font-500>
@@ -61,7 +61,7 @@ const Toolbar = ({ onClick, onClear, resetActive }: Props) => {
           min-h-8
           mr-1
           cursor="pointer"
-          bg-gray-400
+          bg-slate-600
           onClick={onClear}
         >
           <ClearOutlined />
@@ -74,7 +74,7 @@ const Toolbar = ({ onClick, onClear, resetActive }: Props) => {
           min-h-8
           mr-1
           cursor="pointer"
-          bg-gray-400
+          bg-slate-600
           onClick={resetActive}
         >
           <CloseOutlined />

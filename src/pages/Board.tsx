@@ -52,7 +52,7 @@ const Board = () => {
                       idy % 3 === 2 ? "mr-1" : "mr-0.5",
                       active[0] === idx && active[1] === idy && "animate-pulse",
                       !disabled && "cursor-pointer",
-                      disabled ? "bg-gray-400" : "bg-gray-200",
+                      disabled ? "bg-slate-600" : "bg-gray-200",
                     ]
                       .filter(Boolean)
                       .join(" ")}
