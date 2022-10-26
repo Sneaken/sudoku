@@ -1,6 +1,20 @@
 import { useCallback, useEffect, useMemo, useState } from "preact/hooks";
 import { DIFFICULTY, Game } from "../utils/Sudoku";
 
+// 游戏当前的状态
+const saveGameBoard = (board: string[][]) =>
+  localStorage.setItem("game-board", JSON.stringify(board));
+const readGameBoardFromLocal = () =>
+  localStorage.getItem("game-board") &&
+  JSON.parse(localStorage.getItem("game-board")!);
+
+// 原始题目的格子位置
+const saveGameSpaces = (spaces: [number, number][]) =>
+  localStorage.setItem("game-spaces", JSON.stringify(spaces));
+const readGameSpacesFromLocal = () =>
+  localStorage.getItem("game-spaces") &&
+  JSON.parse(localStorage.getItem("game-spaces")!);
+
 const initGame: (mode: keyof typeof DIFFICULTY) => string[][] = (mode) => {
   const puzzle = [...Game.generate(mode)];
   const result = Array.from({ length: 9 })
@@ -66,13 +80,21 @@ const useGame = () => {
       });
     });
     setSpaces(spaces);
+    localStorage.clear();
+    saveGameSpaces(spaces);
     setBoard(board);
     setActive([-1, -1]);
     setWin(false);
   }, []);
 
   useEffect(() => {
-    newGame();
+    const localState = readGameBoardFromLocal();
+    if (localState) {
+      setBoard(localState);
+      setSpaces(readGameSpacesFromLocal() || []);
+    } else {
+      newGame();
+    }
   }, [newGame]);
 
   useEffect(() => {
@@ -90,6 +112,7 @@ const useGame = () => {
       setBoard((board) => {
         const newBoard = JSON.parse(JSON.stringify(board));
         newBoard[idx][idy] = value;
+        saveGameBoard(newBoard);
         return newBoard;
       });
     },
