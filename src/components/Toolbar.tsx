@@ -1,11 +1,17 @@
 import { h } from "preact";
-import { ClearOutlined, CloseOutlined } from "@ant-design/icons";
-import { useEffect, useRef } from "preact/compat";
+import {
+  ClearOutlined,
+  CloseOutlined,
+  EyeInvisibleOutlined,
+  EyeOutlined,
+} from "@ant-design/icons";
+import { useEffect, useRef, useState } from "preact/hooks";
 import { numberColors } from "../var/Color";
 
 const numbers = Array.from({ length: 9 }).map((_, idx) => idx + 1);
 
 interface Props {
+  candidateList: string[];
   onClick: (number: string) => void;
   onClear: () => void;
   resetActive: () => void;
@@ -13,8 +19,10 @@ interface Props {
 
 const Toolbar = (props: Props) => {
   const propRef = useRef(props);
+  const { candidateList, onClick, onClear, resetActive } = props;
   propRef.current = props;
 
+  const [easyMode, setEasyMode] = useState(false);
   useEffect(() => {
     const listener = (e: KeyboardEvent) => {
       const { onClick, onClear, resetActive } = propRef.current;
@@ -39,7 +47,16 @@ const Toolbar = (props: Props) => {
         {numbers.map((it) => {
           return (
             <div
-              className={numberColors[it]}
+              className={[
+                numberColors[it],
+                easyMode
+                  ? candidateList.includes(String(it))
+                    ? "bg-slate-600"
+                    : "bg-slate-800"
+                  : "bg-slate-600",
+              ]
+                .filter(Boolean)
+                .join(" ")}
               flex="~"
               items-center
               justify-center
@@ -47,8 +64,7 @@ const Toolbar = (props: Props) => {
               min-h-8
               mr-1
               cursor="pointer"
-              bg-slate-600
-              onClick={() => props.onClick(String(it))}
+              onClick={() => onClick(String(it))}
             >
               <div text-xl font-500>
                 {it}
@@ -67,7 +83,8 @@ const Toolbar = (props: Props) => {
           mr-1
           cursor="pointer"
           bg-slate-600
-          onClick={props.onClear}
+          title="清除"
+          onClick={onClear}
         >
           <ClearOutlined />
         </div>
@@ -80,9 +97,24 @@ const Toolbar = (props: Props) => {
           mr-1
           cursor="pointer"
           bg-slate-600
-          onClick={props.resetActive}
+          title="取消选中"
+          onClick={resetActive}
         >
           <CloseOutlined />
+        </div>
+        <div
+          flex="~"
+          items-center
+          justify-center
+          min-w-8
+          min-h-8
+          mr-1
+          cursor="pointer"
+          bg-slate-600
+          title="提示模式"
+          onClick={() => setEasyMode(!easyMode)}
+        >
+          {easyMode ? <EyeOutlined /> : <EyeInvisibleOutlined />}
         </div>
       </div>
     </div>

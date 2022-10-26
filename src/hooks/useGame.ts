@@ -55,6 +55,7 @@ const useGame = () => {
     }, {} as Record<string, 1>);
   }, [spaces]);
 
+  const [win, setWin] = useState(false);
   const newGame = useCallback(() => {
     const board = initGame();
     const spaces: [number, number][] = [];
@@ -67,6 +68,7 @@ const useGame = () => {
     setSpaces(spaces);
     setBoard(board);
     setActive([-1, -1]);
+    setWin(false);
   }, []);
 
   useEffect(() => {
@@ -74,11 +76,15 @@ const useGame = () => {
   }, [newGame]);
 
   useEffect(() => {
-    board.length && isValidSudoku(board) && alert("win!");
+    if (board.length && isValidSudoku(board)) {
+      setWin(true);
+      alert("win");
+    }
   }, [board]);
 
   const onBoardChange = useCallback(
     (value = "") => {
+      if (win) return;
       const [idx, idy] = active;
       if (idx === -1 && idy === -1) return;
       setBoard((board) => {
@@ -87,12 +93,61 @@ const useGame = () => {
         return newBoard;
       });
     },
-    [active]
+    [active, win]
   );
   const isDisabled = useCallback(
     ([idx, idy]: [number, number]) => !spacesMapping[`${idx},${idy}`],
     [spacesMapping]
   );
+
+  const state = useMemo(() => {
+    const line = Array(9)
+      .fill(0)
+      .map((_) => Array(9).fill(false));
+    const column = Array(9)
+      .fill(0)
+      .map((_) => Array(9).fill(false));
+    const block = Array(3)
+      .fill(0)
+      .map((_) =>
+        Array(3)
+          .fill(0)
+          .map((_) => Array(9).fill(false))
+      );
+    if (board.length === 0) return { line, column, block };
+    for (let i = 0; i < 9; ++i) {
+      for (let j = 0; j < 9; ++j) {
+        if (board[i][j] === "") continue;
+        const digit = Number(board[i][j]) - 1;
+        const idx = (i / 3) | 0;
+        const idy = (j / 3) | 0;
+        line[i][digit] = column[j][digit] = block[idx][idy][digit] = true;
+      }
+    }
+    return { line, column, block };
+  }, [board]);
+
+  // 提示
+  const candidateList = useMemo(() => {
+    const [x, y] = active;
+    if (x === -1 && y === -1) return [];
+    const { line, column, block } = state;
+    const idx = (x / 3) | 0;
+    const idy = (y / 3) | 0;
+    let candidateList = block[idx][idy]
+      .map((bool, idx) => !bool && String(idx + 1))
+      .filter((it) => it) as string[];
+    line[x].forEach((bool, idx) => {
+      if (!bool) return;
+      candidateList = candidateList.filter((it) => it !== String(idx + 1));
+    });
+    column[y].forEach((bool, idx) => {
+      if (!bool) return;
+      candidateList = candidateList.filter((it) => it !== String(idx + 1));
+    });
+
+    return candidateList;
+  }, [active, state]);
 
   return {
     board,
@@ -101,6 +156,7 @@ const useGame = () => {
     onActiveChange: setActive,
     isDisabled,
     newGame,
+    candidateList,
   };
 };
 

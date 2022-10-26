@@ -5,8 +5,15 @@ import Toolbar from "../components/Toolbar";
 import useGame from "../hooks/useGame";
 
 const Board = () => {
-  const { board, active, isDisabled, onBoardChange, onActiveChange, newGame } =
-    useGame();
+  const {
+    board,
+    active,
+    isDisabled,
+    onBoardChange,
+    onActiveChange,
+    newGame,
+    candidateList,
+  } = useGame();
 
   const handleClick = useCallback(
     (number: string) => {
@@ -77,6 +84,7 @@ const Board = () => {
       <Toolbar
         onClick={handleClick}
         onClear={handleClear}
+        candidateList={candidateList}
         resetActive={handleResetActive}
       />
     </>
