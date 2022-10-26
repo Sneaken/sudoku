@@ -30,7 +30,7 @@ const Board = () => {
   }, [onActiveChange]);
   return (
     <>
-      <div p="y-2">
+      <div pt-5>
         <button
           onClick={() => {
             newGame();
