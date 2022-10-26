@@ -32,7 +32,7 @@ const Toolbar = (props: Props) => {
         case "Backspace":
           return onClear?.();
         default:
-          if (!/[1-9]/.test(e.key)) return;
+          if (!/$[1-9]/.test(e.key)) return;
           return onClick?.(e.key);
       }
     };
