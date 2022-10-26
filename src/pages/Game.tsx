@@ -32,18 +32,36 @@ const Game = () => {
   }, [onActiveChange]);
   return (
     <>
-      <div pt-5>
-        <button onClick={() => newGame(mode)}>New Game</button>
+      <div pt-5 ma>
+        <div
+          inline-block
+          mr-1
+          p="x-2"
+          border="0.5 gray-400/10"
+          rounded
+          text="white"
+          bg-sky-500
+          cursor="pointer"
+          onClick={() => newGame(mode)}
+        >
+          New Game
+        </div>
         {DIFFICULTIES.map((it) => {
           return (
-            <button
-              rounded
-              border="0.5 gray-400/10"
+            <div
+              inline-block
               ml="0.5"
+              p="x-2"
+              border="0.5 gray-400/10"
+              rounded
+              text="white"
+              bg-sky-500
+              mb-1
+              cursor="pointer"
               onClick={() => setMode(it)}
             >
               {it}
-            </button>
+            </div>
           );
         })}
       </div>
