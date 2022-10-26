@@ -1,17 +1,17 @@
 import { useCallback, useEffect, useMemo, useState } from "preact/hooks";
+import { DIFFICULTY, Game } from "../utils/Sudoku";
 
-const initGame: () => string[][] = () => {
-  return [
-    ["5", "3", "", "", "7", "", "", "", ""],
-    ["6", "", "", "1", "9", "5", "", "", ""],
-    ["", "9", "8", "", "", "", "", "6", ""],
-    ["8", "", "", "", "6", "", "", "", "3"],
-    ["4", "", "", "8", "", "3", "", "", "1"],
-    ["7", "", "", "", "2", "", "", "", "6"],
-    ["", "6", "", "", "", "", "2", "8", ""],
-    ["", "", "", "4", "1", "9", "", "", "5"],
-    ["", "", "", "", "8", "", "", "7", "9"],
-  ];
+const initGame: (mode: keyof typeof DIFFICULTY) => string[][] = () => {
+  const puzzle = [...Game.generate(DIFFICULTY.EASY)];
+  const result = Array.from({ length: 9 })
+    .fill([])
+    .map(() => Array.from({ length: 9 }).fill("")) as string[][];
+  puzzle.forEach((char, idx) => {
+    const x = (idx / 9) | 0;
+    const y = idx % 9;
+    result[x][y] = char === "." ? "" : char;
+  });
+  return result;
 };
 
 const isValidSudoku = (board: string[][]) => {
@@ -56,8 +56,8 @@ const useGame = () => {
   }, [spaces]);
 
   const [win, setWin] = useState(false);
-  const newGame = useCallback(() => {
-    const board = initGame();
+  const newGame = useCallback((mode: keyof typeof DIFFICULTY = "EASY") => {
+    const board = initGame(mode);
     const spaces: [number, number][] = [];
     board.forEach((row, idx) => {
       row.forEach((it, idy) => {
