@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useMemo, useState } from "preact/hooks";
 import { DIFFICULTY, Game } from "../utils/Sudoku";
 
-const initGame: (mode: keyof typeof DIFFICULTY) => string[][] = () => {
-  const puzzle = [...Game.generate(DIFFICULTY.EASY)];
+const initGame: (mode: keyof typeof DIFFICULTY) => string[][] = (mode) => {
+  const puzzle = [...Game.generate(mode)];
   const result = Array.from({ length: 9 })
     .fill([])
     .map(() => Array.from({ length: 9 }).fill("")) as string[][];

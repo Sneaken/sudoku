@@ -15,7 +15,7 @@ const DIFFICULTIES = [
   "VERY-HARD",
   "INSANE",
   "INHUMAN",
-];
+] as const;
 
 class Sudoku {
   static DIGITS = "123456789";

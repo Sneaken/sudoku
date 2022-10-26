@@ -1,10 +1,11 @@
 import { h } from "preact";
 import { numberColors } from "../var/Color";
-import { useCallback } from "preact/hooks";
+import { useCallback, useState } from "preact/hooks";
 import Toolbar from "../components/Toolbar";
 import useGame from "../hooks/useGame";
+import { DIFFICULTIES, DIFFICULTY } from "../utils/Sudoku";
 
-const Board = () => {
+const Game = () => {
   const {
     board,
     active,
@@ -15,6 +16,7 @@ const Board = () => {
     candidateList,
   } = useGame();
 
+  const [mode, setMode] = useState<keyof typeof DIFFICULTY>(DIFFICULTIES[0]);
   const handleClick = useCallback(
     (number: string) => {
       onBoardChange(number);
@@ -31,13 +33,19 @@ const Board = () => {
   return (
     <>
       <div pt-5>
-        <button
-          onClick={() => {
-            newGame();
-          }}
-        >
-          New Game
-        </button>
+        <button onClick={() => newGame(mode)}>New Game</button>
+        {DIFFICULTIES.map((it) => {
+          return (
+            <button
+              rounded
+              border="0.5 gray-400/10"
+              ml="0.5"
+              onClick={() => setMode(it)}
+            >
+              {it}
+            </button>
+          );
+        })}
       </div>
       <div p5 select-none>
         {board.map((row, idx) => {
@@ -91,4 +99,4 @@ const Board = () => {
   );
 };
 
-export default Board;
+export default Game;
